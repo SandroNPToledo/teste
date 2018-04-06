@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>Home</title>
+    <!-- <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script> -->
+    <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+
+class Clock extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {date: new Date()};
+  }
+
+  componentDidMount() {
+    this.timerID = setInterval(() => this.tick(),1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timerID);
+  }
+
+  tick() {
+    this.setState({
+      date: new Date()
+    });
+  }
+
+  render() {
+    return (
+      <span>{this.state.date.toLocaleTimeString()}</span>
+    );
+  }
+}
+
+class HomeArticle extends React.Component { 
+
+	constructor(props) {
+    	super(props);
+    	this.state = {showArticle: true};
+    	this.handleToggleClick = this.handleToggleClick.bind(this);
+	}
+	
+	handleToggleClick() {
+		this.setState(prevState => ({
+			showArticle: !prevState.showArticle
+		}));
+	}
+
+	render() {
+		if (!this.state.showArticle)
+			return (
+	<div className="col-lg-3 col-md-6 col-sm-12">
+			<h2 className="text-md-center text-sm-left" onClick={this.handleToggleClick}>{this.props.title} <small className="text-muted" style={{fontSize: 20, textColor: "#2020a0"}}>▼</small></h2>
+	</div>
+			);
+
+		return (
+	<div className="col-lg-3 col-md-6 col-sm-12">
+			<h2 className="text-md-center text-sm-left" onClick={this.handleToggleClick}>{this.props.title} <small className="text-muted" style={{fontSize: 20, textColor: "#2020a0"}}>▲</small></h2>
+	<p>
+	{this.props.children}
+	</p>
+	</div>);
+	}
+}
+
+function NavItem(props) {
+	if (props.menuState.currPage==props.page ) {
+		return (
+			<li className="nav-item">
+			<a className="nav-link active" href="#" onClick={(e) => props.openPage(props.page,e)}>{props.children}</a>
+			</li>);
+	}
+	return (
+		<li className="nav-item">
+		<a className="nav-link" href="#" onClick={(e) => props.openPage(props.page,e)}>{props.children}</a>
+		</li>);
+}
+
+function NavTab(props) {
+	return (<ul className="nav nav-tabs">{props.children}</ul>)
+}
+
+
+function BootstrapContainer(props) {
+	return (<div className="container" style={props.style}>{props.children}</div>);
+}
+function BootstrapFluidContainer(props) {
+	return (<div className="container-fluid" style={props.style}>{props.children}</div>);
+}
+function BootstrapRow(props) {
+	return (<div className="row">{props.children}</div>);
+}
+
+
+function PageHeader() {
+	return (<BootstrapFluidContainer>
+		<br/>
+  		<h1 style={{textAlign: "center"}}>Test Homepage</h1>
+		<br/>
+	</BootstrapFluidContainer>);
+}
+
+function PageFotter() {
+	return (<span><br/><BootstrapFluidContainer style={{backgroundColor: "#696969", color: "#87CEFA"}}>
+	<h5 style={{textAlign: "center"}}>Local time <Clock/></h5>
+	</BootstrapFluidContainer></span>);
+}
+
+function ShowIfCurrentPage(props) {
+	if (props.page==props.currentPage) {
+		return <span>{props.children}</span>;
+	}
+	return null;
+}
+
+function CopyrigthPage() {
+	return (<div><br/><br/><p>Desenvolvido por Sandro N. P de Toledo. Uso livre.</p><br/></div>);
+}
+
+function HelpPage() {
+	return (<div><br/><p>Página de teste usando Bootstrap + React.<br/>
+		<strong>Atenção: </strong> Nesta versão, utilizando as libs para desenvolvimento.
+		</p></div>);
+}
+
+function HomePage(props) {
+	return (
+	<BootstrapContainer><BootstrapRow>
+		<HomeArticle title="Test col1">
+			Some text, just to test the column reorganization done by bootstrap. Some text, just to test the column reorganization done by bootstrap.
+		</HomeArticle>
+		<HomeArticle title="Test col2">
+			Some text, just to test the column reorganization done by bootstrap. Some text, just to test the column reorganization done by bootstrap.
+		</HomeArticle>
+		<HomeArticle title="Test col3">
+			Some text, just to test the column reorganization done by bootstrap. Some text, just to test the column reorganization done by bootstrap.
+		</HomeArticle>
+		<HomeArticle title="Test col4">
+			Some text, just to test the column reorganization done by bootstrap. Some text, just to test the column reorganization done by bootstrap.
+		</HomeArticle>
+	</BootstrapRow></BootstrapContainer>
+);
+}
+
+
+class MainPage extends React.Component { 
+
+	constructor(props) {
+    	super(props);
+    	this.state = {currPage: "Home"};
+    	this.openPage = this.openPage.bind(this);
+	}
+	
+	openPage(page,e) {
+		console.log('Page '+page);
+		e.preventDefault();
+		this.setState(prevState => ({
+			currPage: page
+		}));
+	}
+
+	render () { return (
+<div>
+	<PageHeader/>
+	<NavTab>
+		<NavItem page="Home" menuState={this.state} openPage={this.openPage}>Home</NavItem>
+		<NavItem page="Copyrigth" menuState={this.state} openPage={this.openPage}>Copyrigth</NavItem>
+		<NavItem page="Help" menuState={this.state} openPage={this.openPage}>Help</NavItem>
+	</NavTab>
+<br/>
+	<ShowIfCurrentPage page="Home" currentPage={this.state.currPage}>
+		<HomePage page={this.state.currPage} /></ShowIfCurrentPage>
+	<ShowIfCurrentPage page="Copyrigth" currentPage={this.state.currPage}>
+		<CopyrigthPage page={this.state.currPage} /></ShowIfCurrentPage>
+	<ShowIfCurrentPage page="Help" currentPage={this.state.currPage}>
+		<HelpPage page={this.state.currPage} /></ShowIfCurrentPage>
+	<PageFotter/>
+</div>
+
+	); 
+}
+}
+
+      ReactDOM.render(
+        <MainPage/>,
+        document.getElementById('root')
+      );
+
+    </script>
+    <!--
+      Note: this page is a great way to try React but it's not suitable for production.
+      It slowly compiles JSX with Babel in the browser and uses a large development build of React.
+
+      To set up a production-ready React build environment, follow these instructions:
+      * https://reactjs.org/docs/add-react-to-a-new-app.html
+      * https://reactjs.org/docs/add-react-to-an-existing-app.html
+
+      You can also use React without JSX, in which case you can remove Babel:
+      * https://reactjs.org/docs/react-without-jsx.html
+      * https://reactjs.org/docs/cdn-links.html
+    -->
+  </body>
+</html>
